@@ -43,8 +43,12 @@ const searchNames = async (res) => {
     connection.end()
 }
 
-app.get('/', async (req, res) => {
+app.use(async(req, res, next)=>{
     await insertName('Glauco P C Santos');
+    next();
+})
+
+app.get('/', async (req, res) => {
     await searchNames(res);
 })
 
