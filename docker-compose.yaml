@@ -21,8 +21,6 @@ services:
     volumes:
       - ./node:/usr/src/app
     tty: true
-    ports:
-      - "3000:3000"
     entrypoint: sh -c "npm install && node index.js"
     depends_on:
       db:

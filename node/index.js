@@ -43,7 +43,7 @@ const searchNames = async (res) => {
     connection.end()
 }
 
-app.use(async(req, res, next)=>{
+app.use('/',async(req, res, next)=>{
     await insertName('Glauco P C Santos');
     next();
 })
