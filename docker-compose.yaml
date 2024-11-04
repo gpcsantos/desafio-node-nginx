@@ -1,0 +1,52 @@
+services:
+
+  nginx:
+    build:
+      context: nginx
+    container_name: nginx
+    networks:
+      - node-network
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+      - app
+
+  app:
+    build:
+      context: node
+    container_name: app
+    networks: 
+      - node-network
+    volumes:
+      - ./node:/usr/src/app
+    tty: true
+    ports:
+      - "3000:3000"
+    entrypoint: sh -c "npm install && node index.js"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.4.0
+    container_name: db
+    restart: always
+    tty: true
+    volumes:
+      - ./mysql-db:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=nodedb
+      - MYSQL_ROOT_PASSWORD=root
+    networks:
+      - node-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 5s
+      timeout: 10s
+      retries: 3
+
+  
+networks:
+  node-network:
+    driver: bridge

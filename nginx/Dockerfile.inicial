@@ -1,0 +1,25 @@
+# imagem de início : Qual a imagem base para a nova imagem
+FROM nginx:latest
+
+# Diretório que irá trabalhar dentro do container
+WORKDIR /app
+
+# Comando a serem executados na nova imagem
+# RUN apt-get update
+# RUN apt-get install nano -y
+RUN apt-get update && \
+    apt-get install nano -y
+
+
+# copiar conteudo do meu computador para o conaiter
+# COPY source dest
+COPY html/ /usr/share/nginx/html
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
+CMD ["nginx", "-g", "daemon off;"]
+
+
+## comando para criar uma imagem
+# docker buil -t         gpcsantos/nginx-com-nano:latest .
+#              tag       docker hub user / tag da imagen  . (local onde está o dockerfile)
