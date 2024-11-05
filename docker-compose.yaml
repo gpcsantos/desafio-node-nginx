@@ -22,6 +22,8 @@ services:
       - ./node:/usr/src/app
     tty: true
     entrypoint: sh -c "npm install && node index.js"
+    ports:
+      - "3000:3000"
     depends_on:
       db:
         condition: service_healthy
